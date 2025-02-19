@@ -1,0 +1,9 @@
+@Test_HostAddress = http://localhost:8081
+
+GET {{Test_HostAddress}}/weatherforecast/
+Accept: application/json
+
+
+GET {{Test_HostAddress}}/weatherforecast/
+Accept: application/json
+###

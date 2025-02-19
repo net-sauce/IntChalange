@@ -1,0 +1,107 @@
+{
+  "Routes": [  
+    {
+      "DownstreamPathTemplate": "/process/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "api_process",
+          "Port": "8080"
+        }
+      ],
+      "UpstreamPathTemplate": "/process/{everything}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "SwaggerKey": "APIProcess"
+    },
+    {
+      "DownstreamPathTemplate": "/job/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "api_process",
+          "Port": "8080"
+        }
+      ],
+      "UpstreamPathTemplate": "/job/{everything}",
+      "UpstreamHttpMethod": [ "Put", "Get" ],
+      "SwaggerKey": "APIProcess"
+    },
+    {
+      "DownstreamPathTemplate": "/user/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "api_user",
+          "Port": "8080"
+        }
+      ],
+      "UpstreamPathTemplate": "/user/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Put", "Post" ],
+      "SwaggerKey": "APIUser"
+    },
+    {
+      "DownstreamPathTemplate": "/s3presignedurl",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "api_s3",
+          "Port": "8080"
+        }
+      ],
+      "UpstreamPathTemplate": "/s3presignedurl",
+      "UpstreamHttpMethod": [ "Get", "Post" ],
+      "SwaggerKey": "APIS3"
+    },
+    {
+      "DownstreamPathTemplate": "/hub/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "signalr",
+          "Port": 8080 // SignalR backend service's port
+        }
+      ],
+      "UpstreamPathTemplate": "/chat/hub/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete", "Options" ],
+      "UseProxyToForwardWebSocket": true
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:8080"
+  },
+  "SwaggerEndPoints": [
+    {
+      "Key": "APIUser",
+      "Config": [
+        {
+          "TransformByOcelotConfig": false,
+          "Name": "User API",
+          "Version": "v1",
+          "Url": "http://api_user:8080/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "APIProcess",
+      "Config": [
+        {
+          "TransformByOcelotConfig": false,
+          "Name": "Process and Jobs API",
+          "Version": "v1",
+          "Url": "http://api_process:8080/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "APIS3",
+      "Config": [
+        {
+          "TransformByOcelotConfig": false,
+          "Name": "S3 API",
+          "Version": "v1",
+          "Url": "http://api_s3:8080/swagger/v1/swagger.json"
+        }
+      ]
+    }
+  ]
+}

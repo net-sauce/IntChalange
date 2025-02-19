@@ -1,0 +1,19 @@
+{
+  "profiles": {
+    "ONBUS.MINIWATCH": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "RABBITMQ_PSWD": "rbpass",
+        "RABBITMQ_HOST": "localhost",
+        "MINIO_ENDPOINT": "localhost:9000",
+        "MINIO_ACCESS_KEY": "minio123",
+        "MINIO_SECRET_KEY": "minio123",
+        "BUCKET_NAME": "files",
+        "RABBITMQ_USER": "rbuser"
+      }
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}

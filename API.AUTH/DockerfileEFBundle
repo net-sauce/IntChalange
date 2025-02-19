@@ -1,0 +1,20 @@
+﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ENV PATH="${PATH}:/root/.dotnet/tools"
+RUN dotnet tool install --global dotnet-ef --version 8.0.13
+WORKDIR /src
+COPY ["API.AUTH/API.AUTH.csproj", "API.AUTH/"]
+RUN dotnet restore "./API.AUTH/API.AUTH.csproj"
+COPY . .
+WORKDIR "/src/API.AUTH"
+RUN dotnet ef migrations bundle --self-contained -r linux-x64
+
+
+FROM base AS final
+ENV CON_STRING="Server=auth_db;Database=auth;User=authsa;Password=authp4ss0;"
+WORKDIR /app
+COPY --from=build /src/API.AUTH/efbundle .
+
+ENTRYPOINT [".\efbundle", "${CON_STRING}"]

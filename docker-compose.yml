@@ -1,0 +1,151 @@
+services:
+  api_gw:
+    build:
+      context: ./
+      dockerfile: ./API.GW/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+      - GlobalConfiguration_BaseUrl=http://+:8080
+    ports:
+      - "8080:8080"
+
+  api_process:
+    build:
+      context: ./
+      dockerfile: ./API.PROCESS/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+      - RABBITMQ_USER=rbuser
+      - RABBITMQ_PSWD=rbpass
+      - RABBITMQ_HOST=rabbitmq
+      - MONGO_CON=mongodb://mango:mango@mongodb:27017/?authMechanism=SCRAM-SHA-256
+      - MONGO_DB=uploadDB
+    ports:
+      - "8080"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+
+  api_user:
+    build:
+      context: ./
+      dockerfile: ./API.USER/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+      - RABBITMQ_USER=rbuser
+      - RABBITMQ_PSWD=rbpass
+      - RABBITMQ_HOST=rabbitmq
+      - MONGO_CON=mongodb://mango:mango@mongodb:27017/?authMechanism=SCRAM-SHA-256
+      - MONGO_DB=uploadDB
+    ports:
+      - "8080"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+
+  api_s3:
+    build:
+      context: ./
+      dockerfile: ./API.S3/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+      - MONGO_CON=mongodb://mango:mango@mongodb:27017/?authMechanism=SCRAM-SHA-256
+      - MONGO_DB=uploadDB
+      - MINIO_ENDPOINT=minio:9000
+      - MINIO_ACCESS_KEY=minio123
+      - MINIO_SECRET_KEY=minio123
+      - BUCKET_NAME=files
+    ports:
+      - "8080"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+
+  onbus_status:
+    build:
+      context: ./
+      dockerfile: ./ONBUS.STATUSSERVICE/Dockerfile
+    environment:
+      - RABBITMQ_USER=rbuser
+      - RABBITMQ_PSWD=rbpass
+      - RABBITMQ_HOST=rabbitmq
+      - MONGO_CON=mongodb://mango:mango@mongodb:27017/?authMechanism=SCRAM-SHA-256
+      - MONGO_DB=uploadDB
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+
+  onbus_watch:
+    build:
+      context: ./        
+      dockerfile: ./ONBUS.MINIWATCH/Dockerfile
+    environment:
+      - RABBITMQ_USER=rbuser
+      - RABBITMQ_PSWD=rbpass
+      - RABBITMQ_HOST=rabbitmq
+      - MINIO_ENDPOINT=minio:9000
+      - MINIO_ACCESS_KEY=minio123
+      - MINIO_SECRET_KEY=minio123
+      - BUCKET_NAME=files
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+
+  minio:
+    image: minio/minio
+    volumes:
+      - miniodata:/data
+    ports:
+      - "9000:9000"
+      - "9005:9005"
+     
+    environment:
+      - MINIO_ROOT_USER=minio123
+      - MINIO_ROOT_PASSWORD=minio123
+      - MINIO_OPTS=--console-address :9005
+    command: server /data --console-address ":9005"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672" # RabbitMQ Management UI
+    environment:
+      - RABBITMQ_DEFAULT_USER=rbuser
+      - RABBITMQ_DEFAULT_PASS=rbpass
+    healthcheck:
+      test: [ "CMD", "rabbitmqctl", "status"]
+      #test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mongodb:
+    image: mongo:latest
+    volumes:
+      - mongodbdata:/data/db
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mango
+      MONGO_INITDB_ROOT_PASSWORD: mango
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  miniodata:
+  mongodbdata:
+  mysql_data:

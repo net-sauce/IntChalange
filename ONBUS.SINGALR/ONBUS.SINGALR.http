@@ -1,0 +1,6 @@
+@ONBUS.SINGALR_HostAddress = http://localhost:5110
+
+GET {{ONBUS.SINGALR_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

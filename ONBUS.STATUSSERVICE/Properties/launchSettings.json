@@ -1,0 +1,26 @@
+{
+  "profiles": {
+    "ONBUS.STATUSSERVICE": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development",
+        "MONGO_CON": "mongodb://mango:mango@localhost:27017/?authMechanism=SCRAM-SHA-256",
+        "MONGO_DB": "uploadDB",
+        "RABBITMQ_USER": "rbuser",
+        "RABBITMQ_PSWD": "rbpass",
+        "RABBITMQ_HOST": "localhost"
+      },
+      "dotnetRunMessages": "true"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker",
+      "environmentVariables": {
+        "MONGO_CON": "mongodb://mango:mango@localhost:27017/?authMechanism=SCRAM-SHA-256",
+        "MONGO_DB": "uploadDB",
+        "RABBITMQ_USER": "rbuser",
+        "RABBITMQ_PSWD": "rbpass",
+        "RABBITMQ_HOST": "rabbitmq"
+      }
+    }
+  }
+}
