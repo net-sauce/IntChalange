@@ -1,13 +1,29 @@
-To run execute docker compose up in main directory
-FYI becouse I have diecited to go microsevices route (over engenered).
-I had not time to test end to end.
-Status
-GW
-	- at localhost:8000/swagger is avaliable for each service accessible by GW
-	- Upload tested
-	- Process tested
-	- User not tested
-BUS
-	- Watch tested notification form minio are processed -> bad code in poco classes
-	- Status state machine works with perssistent storage in mongodb.
-	- Singalr not tested added at last moment to complete whole stack.
+﻿# Microservices Project Documentation
+
+To run the application, execute the following command in the main directory:
+
+```
+docker compose up
+```
+
+## Note
+I decided to go the microservices route (potentially over-engineered), and due to time constraints, I wasn't able to test the system end-to-end.
+
+---
+
+## Current Status
+
+### Gateway (GW)
+- Available at **[localhost:8000/swagger](http://localhost:8000/swagger)** for each service accessible through the Gateway.
+- **Upload**: Tested ✅
+- **Process**: Tested ✅
+- **User**: Not tested ❌
+
+### Message Bus (BUS)
+- **Watch**: Tested ✅ - Notifications from MinIO are processed successfully; however, there is **bad code in POCO classes** that needs to be fixed.
+- **Status State Machine**: Verified to work with persistent storage in MongoDB ✅
+- **SignalR**: Not tested ❌ - Added at the last moment to complete the stack.
+
+---
+
+
