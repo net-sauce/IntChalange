@@ -1,6 +1,0 @@
-@IntChalange_HostAddress = http://localhost:5241
-
-GET {{IntChalange_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
