@@ -54,7 +54,7 @@ public class JonStateMachine : MassTransitStateMachine<JobEntity>
                         (x.Saga.FilesUploaded?.Count ?? 0) == x.Saga.FilesRequired?.Count,
                     binder => binder
                     .TransitionTo(Completed)
-                        .Publish(context => new OnJobCompleted(context.Saga.JobID)
+                        .Publish(context => new OnJobCompleted(context.Saga.JobID, context.Saga.ClientID)
                        ).Then(x =>
                        {
                            Console.WriteLine($"Job {x.Saga.JobID} completed");
@@ -63,6 +63,7 @@ public class JonStateMachine : MassTransitStateMachine<JobEntity>
                         .Publish(context => new OnFileProgressUpdated
                         {
                             JobID = context.Saga.JobID,
+                            ClientId=context.Saga.ClientID,
                             UploadedFilesCount = context.Saga.FilesUploaded?.Count ?? 0,
                             TotalFilesCount = context.Saga.FilesRequired?.Count ?? 0
                         }).Then(x =>

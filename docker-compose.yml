@@ -98,7 +98,21 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
-      mongodb:
+      minio:
+        condition: service_healthy
+  onbus_signalr:
+    build:
+      context: ./        
+      dockerfile: ./ONBUS.SINGALR/Dockerfile
+    environment:
+      - RABBITMQ_USER=rbuser
+      - RABBITMQ_PSWD=rbpass
+      - RABBITMQ_HOST=rabbitmq
+      - ASPNETCORE_URLS=http://+:8080
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      minio:
         condition: service_healthy
 
   minio:
@@ -108,7 +122,12 @@ services:
     ports:
       - "9000:9000"
       - "9005:9005"
-     
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s 
     environment:
       - MINIO_ROOT_USER=minio123
       - MINIO_ROOT_PASSWORD=minio123

@@ -82,7 +82,8 @@ public class MinioService
                             _publishEndpoint.Publish(new OnFileUploaded
                             {
                                 JobID = Guid.Parse(parts[1]),
-                                FileName = parts[2]
+                                FileName = parts[2],
+                                ClientID = parts[0]
                             });
 
                             Console.WriteLine($"Published event for JobID={parts[1]}, FileName={parts[2]}");

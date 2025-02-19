@@ -57,11 +57,11 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "signalr",
+          "Host": "onbus_signalr",
           "Port": 8080 // SignalR backend service's port
         }
       ],
-      "UpstreamPathTemplate": "/chat/hub/{everything}",
+      "UpstreamPathTemplate": "/signals/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete", "Options" ],
       "UseProxyToForwardWebSocket": true
     }

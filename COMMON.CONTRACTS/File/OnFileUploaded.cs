@@ -10,5 +10,6 @@ namespace COMMON.CONTRACTS.File
     {
         public Guid JobID { get; set; }
         public required string FileName { get; set; }
+        public string ClientID { get; set; }
     }
 }
